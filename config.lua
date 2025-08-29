@@ -1,5 +1,3 @@
-Config.Weapon = {}
-
 Config.Weapon = {
     ['progressbar'] = {
         duration = 25000,
@@ -13,16 +11,16 @@ Config.Weapon = {
         [1] = {
             coords = vec3(-106.0632, -2230.2263, 7.8117),
             money = 'black_money',
-            money_label = 'Schwarzgeld',
+            money_label = 'Black Money',
         },
         [2] = {
             coords = vec3(-339.1871, -368.9467, 20.2262),
             money = 'money',
-            money_label = 'Bargeld'
+            money_label = 'Cash'
         },
     },
     ['language'] = {
-        HelpUI = 'um die Repairstation zu öffnen!',
-        menu_title = 'Waffen Repair Station',
+        HelpUI = 'to open the repair station!',
+        menu_title = 'Weapon Repair Station',
     },
 }
