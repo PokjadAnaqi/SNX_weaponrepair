@@ -1,3 +1,5 @@
+Config.Weapon = {}
+
 Config.Weapon = {
     ['progressbar'] = {
         duration = 25000,
