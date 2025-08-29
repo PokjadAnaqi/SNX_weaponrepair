@@ -1,4 +1,3 @@
-
 Citizen.CreateThread(function()
     Wait(1000)
     print('^4[BL_CORE] - DEBUG | WEAPON REPAIR LOADED')
@@ -18,8 +17,12 @@ Citizen.CreateThread(function()
             if self.currentDistance < 1.5 then
                 HelpUI('E', Config.Weapon.language.HelpUI)
                 if IsControlJustPressed(0, 51) then  
-                    if exports.ox_inventory:getCurrentWeapon() == nil then return  Notify('BLACKLINE CITY', 'Du hast keine Waffe in deiner Hand', 'error') end
-                    if exports.ox_inventory:getCurrentWeapon().metadata.durability == 100 then return Notify('BLACKLINE CITY', 'Du hast deine Waffe ['..exports.ox_inventory:getCurrentWeapon().name..'] kann nicht Repariert weden da sie nicht kaputt ist!', 'warning') end
+                    if exports.ox_inventory:getCurrentWeapon() == nil then 
+                        return Notify('BLACKLINE CITY', 'You have no weapon in your hand', 'error') 
+                    end
+                    if exports.ox_inventory:getCurrentWeapon().metadata.durability == 100 then 
+                        return Notify('BLACKLINE CITY', 'Your weapon ['..exports.ox_inventory:getCurrentWeapon().name..'] cannot be repaired because it is not damaged!', 'warning') 
+                    end
                     local getCurrentWeapon = exports.ox_inventory:getCurrentWeapon()
                     local weaponprice = 100 - getCurrentWeapon.metadata.durability
                     local price = weaponprice * 100
@@ -29,13 +32,13 @@ Citizen.CreateThread(function()
                         options = {
                           {
                             title = getCurrentWeapon.label,
-                            description = 'Repariere deine Waffe für '..price..'$ '..Config.Weapon.coords[i].money_label,
-                            progress =getCurrentWeapon.metadata.durability,
+                            description = 'Repair your weapon for '..price..'$ '..Config.Weapon.coords[i].money_label,
+                            progress = getCurrentWeapon.metadata.durability,
                             colorScheme = '#1864AB',
                             icon = 'gun',
                             image = 'nui://ox_inventory/web/images/'..exports.ox_inventory:getCurrentWeapon().name..'.png',
                             onSelect = function()
-                                local weapon =getCurrentWeapon.name
+                                local weapon = getCurrentWeapon.name
                                 if lib.progressCircle({
                                     duration = Config.Weapon.progressbar.duration,
                                     position = 'bottom',
@@ -51,16 +54,18 @@ Citizen.CreateThread(function()
                                     },
                                 }) then 
                                     local account = lib.callback.await('bl_core:getMoney', false, Config.Weapon.coords[i].money)
-                                    if account == nil then return Notify('BLACKLINE CITY', 'Es gab einen Fehler!', 'error') end
+                                    if account == nil then 
+                                        return Notify('BLACKLINE CITY', 'An error occurred!', 'error') 
+                                    end
                                     if account.money >= price then 
                                         TriggerServerEvent('bl_core:repairWeapon', getCurrentWeapon.slot, 100)
                                         TriggerServerEvent('bl_core:removeMoney', Config.Weapon.coords[i].money, price)
-                                        Notify('BLACKLINE CITY', 'Du hast deine Waffe ['..exports.ox_inventory:getCurrentWeapon().name..'] für '..price..'$ '..Config.Weapon.coords[i].money_label..' Repariert!', 'success')
+                                        Notify('BLACKLINE CITY', 'You repaired your weapon ['..exports.ox_inventory:getCurrentWeapon().name..'] for '..price..'$ '..Config.Weapon.coords[i].money_label..'!', 'success')
                                     else
-                                        Notify('BLACKLINE CITY', 'Du hast nicht genug Geld bei dir! Dir fehlen '..price-account.money..'$ '..Config.Weapon.coords[i].money_label, 'warning')
+                                        Notify('BLACKLINE CITY', 'You don’t have enough money! You are missing '..price-account.money..'$ '..Config.Weapon.coords[i].money_label, 'warning')
                                     end
                                 else 
-                                    Notify('BLACKLINE CITY', 'Du hast das Reparieren deiner Waffe ['..exports.ox_inventory:getCurrentWeapon().name..'] abgebrochen!', 'error')
+                                    Notify('BLACKLINE CITY', 'You cancelled repairing your weapon ['..exports.ox_inventory:getCurrentWeapon().name..']!', 'error')
                                 end
                               end,
                           }
@@ -79,14 +84,14 @@ function OpenWeaponMenu(getCurrentWeapon)
         title = Config.Weapon.language.menu_title,
         options = {
           {
-            title =getCurrentWeapon.label,
-            description = 'Repariere deine Waffe für '..price..'$ Schwarzgeld',
-            progress =getCurrentWeapon.metadata.durability,
+            title = getCurrentWeapon.label,
+            description = 'Repair your weapon for '..price..'$ Black Money',
+            progress = getCurrentWeapon.metadata.durability,
             colorScheme = '#1864AB',
             icon = 'gun',
             image = 'nui://ox_inventory/web/images/'..exports.ox_inventory:getCurrentWeapon().name..'.png',
             onSelect = function()
-                local weapon =getCurrentWeapon.name
+                local weapon = getCurrentWeapon.name
                 if lib.progressCircle({
                     duration = Config.Weapon.progressbar.duration,
                     position = 'bottom',
@@ -105,12 +110,12 @@ function OpenWeaponMenu(getCurrentWeapon)
                     if account.money >= price then 
                         TriggerServerEvent('bl_core:repairWeapon', getCurrentWeapon.slot, 100)
                         TriggerServerEvent('bl_core:removeMoney', 'black_money', price)
-                        Notify('BLACKLINE CITY', 'Du hast deine Waffe ['..exports.ox_inventory:getCurrentWeapon().name..'] für '..price..'$ Schwarzgeld Repariert!', 'success')
+                        Notify('BLACKLINE CITY', 'You repaired your weapon ['..exports.ox_inventory:getCurrentWeapon().name..'] for '..price..'$ Black Money!', 'success')
                     else
-                        Notify('BLACKLINE CITY', 'Du hast nicht genug Geld bei dir! Dir fehlen '..price-account.money..'$ Schwarzgeld', 'warning')
+                        Notify('BLACKLINE CITY', 'You don’t have enough money! You are missing '..price-account.money..'$ Black Money', 'warning')
                     end
                 else 
-                    Notify('BLACKLINE CITY', 'Du hast das Reparieren deiner Waffe ['..exports.ox_inventory:getCurrentWeapon().name..'] abgebrochen!', 'error')
+                    Notify('BLACKLINE CITY', 'You cancelled repairing your weapon ['..exports.ox_inventory:getCurrentWeapon().name..']!', 'error')
                 end
               end,
           }
@@ -118,4 +123,3 @@ function OpenWeaponMenu(getCurrentWeapon)
     })
     lib.showContext('repair_menu')
 end
-
